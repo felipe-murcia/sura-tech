@@ -1,0 +1,1 @@
+Refactorizar el código siguiendo buenas prácticas y estándares modernos. Extraer la URL base y definirla en una variable baseURL, obteniéndola desde un archivo .env. Implementar manejo de errores mediante bloques try-catch y tipar correctamente los datos utilizando TypeScript.
