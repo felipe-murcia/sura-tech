@@ -30,3 +30,105 @@ Linting:          ESLint + Prettier
 - Sobre mi, solo titulo y un parrafo borrador
 - Proyectos, solo cargar 4 items con data quemada y la estructura son: titulo, varios slug, descripcion y image. contener dos botones de demo y github.
 
+
+//segunda intrucciones despues de crear api strapi
+
+
+#1 Servicio
+Integrar servicio de strapi, esta es la url http://localhost:1337/api/proyectos y el response:
+
+
+  "data": [
+    {
+      "id": 2,
+      "documentId": "y3ck5hk6yrllujvf3vg7hjcm",
+      "titulo": "Prueba",
+      "descripcion": "Prueba PruebaPruebaPruebaPruebaPruebaPruebaPrueba",
+      "stack_sluck": null,
+      "link_demo": null,
+      "link_github": null,
+      "createdAt": "2026-06-01T23:47:29.829Z",
+      "updatedAt": "2026-06-01T23:47:29.829Z",
+      "publishedAt": "2026-06-01T23:47:29.856Z"
+    },
+    {
+      "id": 4,
+      "documentId": "nxax1fkavhpks8ivu7wn3xrd",
+      "titulo": "Prueba",
+      "descripcion": "Prueba PruebaPruebaPruebaPruebaPruebaPruebaPrueba",
+      "stack_sluck": null,
+      "link_demo": null,
+      "link_github": null,
+      "createdAt": "2026-06-02T00:13:57.294Z",
+      "updatedAt": "2026-06-02T00:13:59.859Z",
+      "publishedAt": "2026-06-02T00:13:59.877Z"
+    },
+    {
+      "id": 6,
+      "documentId": "gszfin3dn7f4actzber3nkyz",
+      "titulo": "Portfolio Personal",
+      "descripcion": "Landing page de portfolio con React, MUI y animaciones con Framer Motion.",
+      "stack_sluck": [
+        "React",
+        "TypeScript",
+        "Material UI",
+        "Framer Motion",
+        "Vite"
+      ],
+      "link_demo": "https://miportfolio.vercel.app",
+      "link_github": "https://github.com/usuario/portfolio",
+      "createdAt": "2026-06-02T00:34:33.525Z",
+      "updatedAt": "2026-06-02T00:34:33.525Z",
+      "publishedAt": "2026-06-02T00:34:33.538Z"
+    },
+    {
+      "id": 8,
+      "documentId": "edli54o9buv8daue8dohk9wd",
+      "titulo": "E-Commerce App",
+      "descripcion": "Tienda online completa con carrito de compras, pagos con Stripe y panel admin.",
+      "stack_sluck": [
+        "Next.js",
+        "TypeScript",
+        "Stripe",
+        "PostgreSQL",
+        "Prisma"
+      ],
+      "link_demo": "https://myshop.vercel.app",
+      "link_github": "https://github.com/usuario/ecommerce",
+      "createdAt": "2026-06-02T00:34:33.586Z",
+      "updatedAt": "2026-06-02T00:34:33.586Z",
+      "publishedAt": "2026-06-02T00:34:33.590Z"
+    },
+    {
+      "id": 10,
+      "documentId": "sq1ixokbo1ib73sd5de9cjib",
+      "titulo": "Dashboard Analytics",
+      "descripcion": "Panel de analíticas en tiempo real con gráficas interactivas y filtros avanzados.",
+      "stack_sluck": [
+        "React",
+        "Recharts",
+        "TanStack Query",
+        "Tailwind CSS"
+      ],
+      "link_demo": "https://dashboard.vercel.app",
+      "link_github": "https://github.com/usuario/dashboard",
+      "createdAt": "2026-06-02T00:34:33.619Z",
+      "updatedAt": "2026-06-02T00:34:33.619Z",
+      "publishedAt": "2026-06-02T00:34:33.624Z"
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 5
+    }
+  }
+}
+
+
+#2 Front
+
+Renderizar en el componentes ProjectsSection y en el ciclo de map convertirlo en componente item, hacer codigo de buena practica con hook y services. 
+
