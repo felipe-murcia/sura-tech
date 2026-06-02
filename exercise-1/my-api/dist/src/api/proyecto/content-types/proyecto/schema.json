@@ -1,0 +1,43 @@
+{
+    "kind": "collectionType",
+    "collectionName": "proyectos",
+    "info": {
+        "singularName": "proyecto",
+        "pluralName": "proyectos",
+        "displayName": "Proyecto",
+        "description": "Colección de proyectos del portfolio personal"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "titulo": {
+            "type": "string",
+            "required": true,
+            "maxLength": 150
+        },
+        "descripcion": {
+            "type": "text",
+            "required": true
+        },
+        "stack_sluck": {
+            "type": "json",
+            "required": false
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "link_demo": {
+            "type": "string",
+            "required": false
+        },
+        "link_github": {
+            "type": "string",
+            "required": false
+        }
+    }
+}

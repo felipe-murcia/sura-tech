@@ -1,0 +1,454 @@
+Actúa como un desarrollador backend especializado en Strapi v5.
+Necesito configurar un backend con Strapi que tenga una colección 
+llamada "Proyecto" con campos específicos. Dame la implementación 
+completa paso a paso.
+
+---
+
+## 1. INSTALACIÓN DEL PROYECTO
+
+Dame los comandos exactos para:
+
+// Crear proyecto Strapi v5 con TypeScript
+npx create-strapi-app@latest portfolio-backend
+  --typescript
+  --dbclient=sqlite       (desarrollo local)
+  --no-run
+
+// Estructura de carpetas resultante
+portfolio-backend/
+├── config/
+│   ├── database.ts
+│   ├── middlewares.ts
+│   ├── plugins.ts
+│   └── server.ts
+├── src/
+│   ├── api/
+│   │   └── proyecto/           ← se generará aquí
+│   │       ├── content-types/
+│   │       │   └── proyecto/
+│   │       │       └── schema.json
+│   │       ├── controllers/
+│   │       │   └── proyecto.ts
+│   │       ├── routes/
+│   │       │   └── proyecto.ts
+│   │       └── services/
+│   │           └── proyecto.ts
+│   └── index.ts
+├── .env
+└── package.json
+
+---
+
+## 2. COLLECTION TYPE: Proyecto
+
+Crea el Content Type con exactamente estos campos:
+
+| Campo        | Tipo en Strapi     | Configuración                          |
+|--------------|--------------------|----------------------------------------|
+| id           | Auto (Strapi)      | Generado automáticamente               |
+| titulo       | Short Text         | Required, MaxLength: 150               |
+| descripcion  | Long Text          | Required                               |
+| stack_sluck  | JSON               | Lista de tecnologías del proyecto      |
+| image        | Media (Single)     | Formatos: jpg, jpeg, png, webp, svg    |
+| link_demo    | Text               | URL del proyecto en producción         |
+| link_github  | Text               | URL del repositorio en GitHub          |
+
+---
+
+## 3. SCHEMA JSON COMPLETO
+
+Dame el archivo completo:
+// src/api/proyecto/content-types/proyecto/schema.json
+
+{
+  "kind": "collectionType",
+  "collectionName": "proyectos",
+  "info": {
+    "singularName": "proyecto",
+    "pluralName": "proyectos",
+    "displayName": "Proyecto",
+    "description": "Colección de proyectos del portfolio personal"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "required": true,
+      "maxLength": 150
+    },
+    "descripcion": {
+      "type": "text",
+      "required": true
+    },
+    "stack_sluck": {
+      "type": "json",
+      "required": false
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "link_demo": {
+      "type": "string",
+      "required": false
+    },
+    "link_github": {
+      "type": "string",
+      "required": false
+    }
+  }
+}
+
+---
+
+## 4. PERMISOS DE LA API
+
+Configura los permisos en Settings → Roles:
+
+### Public (sin token):
+✅ GET  /api/proyectos          → find (listar todos)
+✅ GET  /api/proyectos/:id      → findOne (detalle)
+❌ POST, PUT, DELETE            → solo admin
+
+### Authenticated (con token):
+✅ Todos los métodos CRUD
+
+---
+
+## 5. ENDPOINTS DISPONIBLES
+
+Una vez configurado, estos son los endpoints:
+
+// Listar todos los proyectos
+GET http://localhost:1337/api/proyectos
+
+// Obtener un proyecto por ID
+GET http://localhost:1337/api/proyectos/:id
+
+// Con imagen incluida (populate)
+GET http://localhost:1337/api/proyectos?populate=image
+
+// Todos los campos incluyendo imagen
+GET http://localhost:1337/api/proyectos?populate=*
+
+// Crear proyecto (requiere autenticación)
+POST http://localhost:1337/api/proyectos
+Content-Type: application/json
+{
+  "data": {
+    "titulo": "Mi Portfolio",
+    "descripcion": "Portfolio personal con React y MUI",
+    "stack_sluck": ["React", "TypeScript", "Material UI", "Vite"],
+    "link_demo": "https://miportfolio.com",
+    "link_github": "https://github.com/usuario/portfolio"
+  }
+}
+
+// Actualizar proyecto (requiere autenticación)
+PUT http://localhost:1337/api/proyectos/:id
+
+// Eliminar proyecto (requiere autenticación)
+DELETE http://localhost:1337/api/proyectos/:id
+
+---
+
+## 6. TIPO DE RESPUESTA API
+
+Dame el ejemplo de respuesta real de Strapi v5:
+
+// GET /api/proyectos?populate=image
+{
+  "data": [
+    {
+      "id": 1,
+      "documentId": "abc123xyz",
+      "titulo": "Mi Portfolio",
+      "descripcion": "Portfolio personal desarrollado con React",
+      "stack_sluck": ["React", "TypeScript", "Material UI"],
+      "link_demo": "https://miportfolio.com",
+      "link_github": "https://github.com/usuario/portfolio",
+      "image": {
+        "id": 1,
+        "name": "portfolio-cover.png",
+        "url": "/uploads/portfolio_cover_abc123.png",
+        "width": 1200,
+        "height": 630,
+        "formats": {
+          "thumbnail": { "url": "/uploads/thumbnail_portfolio_cover.png" },
+          "small":     { "url": "/uploads/small_portfolio_cover.png" },
+          "medium":    { "url": "/uploads/medium_portfolio_cover.png" }
+        }
+      },
+      "createdAt": "2024-01-15T10:30:00.000Z",
+      "updatedAt": "2024-01-15T10:30:00.000Z",
+      "publishedAt": "2024-01-15T10:30:00.000Z"
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 1
+    }
+  }
+}
+
+---
+
+## 7. TIPOS TYPESCRIPT PARA EL FRONTEND
+
+Dame los tipos listos para usar en React:
+
+// types/proyecto.types.ts
+
+export interface ImageFormat {
+  url: string
+  width: number
+  height: number
+}
+
+export interface ProyectoImage {
+  id: number
+  name: string
+  url: string
+  width: number
+  height: number
+  formats: {
+    thumbnail?: ImageFormat
+    small?: ImageFormat
+    medium?: ImageFormat
+    large?: ImageFormat
+  }
+}
+
+export interface Proyecto {
+  id: number
+  documentId: string
+  titulo: string
+  descripcion: string
+  stack_sluck: string[]        // JSON array de tecnologías
+  image: ProyectoImage | null
+  link_demo: string | null
+  link_github: string | null
+  createdAt: string
+  updatedAt: string
+  publishedAt: string | null
+}
+
+export interface StrapiResponse<T> {
+  data: T[]
+  meta: {
+    pagination: {
+      page: number
+      pageSize: number
+      pageCount: number
+      total: number
+    }
+  }
+}
+
+export type ProyectosResponse = StrapiResponse<Proyecto>
+
+---
+
+## 8. SERVICE EN REACT (Axios)
+
+Dame el service completo para consumir desde el frontend:
+
+// features/projects/services/proyectoService.ts
+
+import api from '@/lib/api'
+import type { ProyectosResponse, Proyecto } from '@/types/proyecto.types'
+
+// Obtener todos los proyectos con imagen
+export const getProyectos = async (): Promise<Proyecto[]> => {
+  const { data } = await api.get<ProyectosResponse>(
+    '/proyectos?populate=image'
+  )
+  return data.data
+}
+
+// Obtener un proyecto por ID
+export const getProyectoById = async (id: number): Promise<Proyecto> => {
+  const { data } = await api.get<{ data: Proyecto }>(
+    `/proyectos/${id}?populate=image`
+  )
+  return data.data
+}
+
+---
+
+## 9. HOOK CON TANSTACK QUERY
+
+// features/projects/hooks/useProyectos.ts
+
+import { useQuery } from '@tanstack/react-query'
+import { getProyectos, getProyectoById } from '../services/proyectoService'
+
+// Lista de proyectos
+export const useProyectos = () => {
+  return useQuery({
+    queryKey: ['proyectos'],
+    queryFn: getProyectos,
+    staleTime: 1000 * 60 * 5,   // 5 minutos de caché
+  })
+}
+
+// Un proyecto por ID
+export const useProyecto = (id: number) => {
+  return useQuery({
+    queryKey: ['proyecto', id],
+    queryFn: () => getProyectoById(id),
+    enabled: !!id,
+  })
+}
+
+---
+
+## 10. SEED DATA (datos de prueba)
+
+Dame un script para poblar la base de datos con proyectos de ejemplo:
+
+// scripts/seed.ts
+// Ejecutar con: npx ts-node scripts/seed.ts
+
+const proyectosSeed = [
+  {
+    titulo: "Portfolio Personal",
+    descripcion: "Landing page de portfolio con React, MUI y animaciones con Framer Motion.",
+    stack_sluck: ["React", "TypeScript", "Material UI", "Framer Motion", "Vite"],
+    link_demo: "https://miportfolio.vercel.app",
+    link_github: "https://github.com/usuario/portfolio"
+  },
+  {
+    titulo: "E-Commerce App",
+    descripcion: "Tienda online completa con carrito de compras, pagos con Stripe y panel admin.",
+    stack_sluck: ["Next.js", "TypeScript", "Stripe", "PostgreSQL", "Prisma"],
+    link_demo: "https://myshop.vercel.app",
+    link_github: "https://github.com/usuario/ecommerce"
+  },
+  {
+    titulo: "Dashboard Analytics",
+    descripcion: "Panel de analíticas en tiempo real con gráficas interactivas y filtros avanzados.",
+    stack_sluck: ["React", "Recharts", "TanStack Query", "Tailwind CSS"],
+    link_demo: "https://dashboard.vercel.app",
+    link_github: "https://github.com/usuario/dashboard"
+  }
+]
+
+---
+
+## 11. VARIABLES DE ENTORNO
+
+// .env (desarrollo)
+HOST=0.0.0.0
+PORT=1337
+APP_KEYS=clave1,clave2,clave3,clave4
+API_TOKEN_SALT=salt_secreto
+ADMIN_JWT_SECRET=jwt_admin_secreto
+TRANSFER_TOKEN_SALT=transfer_salt
+JWT_SECRET=jwt_secreto
+
+DATABASE_CLIENT=sqlite
+DATABASE_FILENAME=.tmp/data.db
+
+// .env.production (producción con PostgreSQL)
+DATABASE_CLIENT=postgres
+DATABASE_HOST=tu_host_postgres
+DATABASE_PORT=5432
+DATABASE_NAME=portfolio_db
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=tu_password_segura
+DATABASE_SSL=true
+
+---
+
+## 12. CONFIGURACIÓN DE CORS
+
+// config/middlewares.ts
+// Permitir peticiones desde el frontend React
+
+export default [
+  'strapi::logger',
+  'strapi::errors',
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          'connect-src': ["'self'", 'https:'],
+          'img-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            'res.cloudinary.com',   // si usas Cloudinary
+          ],
+        },
+      },
+    },
+  },
+  {
+    name: 'strapi::cors',
+    config: {
+      origin: [
+        'http://localhost:5173',    // React + Vite dev
+        'https://tu-portfolio.vercel.app'  // producción
+      ],
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'],
+      headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+      keepHeaderOnError: true,
+    },
+  },
+  'strapi::poweredBy',
+  'strapi::query',
+  'strapi::body',
+  'strapi::session',
+  'strapi::favicon',
+  'strapi::public',
+]
+
+---
+
+## 13. COMANDOS PARA CORRER EL PROYECTO
+
+// Instalar dependencias
+npm install
+
+// Modo desarrollo (con hot reload)
+npm run develop
+
+// Build para producción
+npm run build
+
+// Iniciar en producción
+npm run start
+
+// Acceder al admin panel
+http://localhost:1337/admin
+
+// API base URL
+http://localhost:1337/api
+
+---
+
+## OUTPUT ESPERADO
+
+Entrega en este orden:
+1. Comandos de instalación paso a paso
+2. schema.json completo de la colección Proyecto
+3. config/middlewares.ts con CORS configurado
+4. .env de desarrollo y producción
+5. Tipos TypeScript para el frontend
+6. Service de Axios listo para React
+7. Hook de TanStack Query
+8. Script de seed con 3 proyectos de ejemplo
+9. Capturas o descripción de cómo configurar
+   permisos en el panel admin de Strapi

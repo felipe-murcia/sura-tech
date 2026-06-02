@@ -1,0 +1,18 @@
+export const skillItems = [
+  'React',
+  'TypeScript',
+  'Material UI',
+  'Vite',
+  'Redux Toolkit',
+  'TanStack Query',
+  'Axios',
+  'React Router',
+  'React Hook Form',
+  'Zod',
+  'Framer Motion',
+  'Vitest',
+  'Testing Library',
+  'ESLint',
+  'Prettier',
+  'Strapi',
+] as const
