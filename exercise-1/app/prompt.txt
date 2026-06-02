@@ -1,0 +1,32 @@
+Actúa como un Senior Frontend Developer especializado en React, TypeScript 
+y Material UI (MUI v6), con experiencia en landing pages diseño minimalista y arquitectura limpia.
+
+Necesito construir un Personal Creative Portfolio como LANDING PAGE de una 
+sola página (SPA) con React + Vite. Sin Next.js. Sin SSR.
+Dame la implementación completa siguiendo clean code y mejores prácticas.
+
+---
+
+## 1. STACK TECNOLÓGICO
+
+Bundler:          Vite 5+
+Framework:        React 18 (sin Next.js)
+Lenguaje:         TypeScript (strict mode)
+UI Library:       Material UI v6 (MUI)
+Estilos:          MUI sx prop + styled() + theme personalizado
+Routing:          React Router DOM v6 (solo para anclas de sección)
+Estado global:    Zustand (dark mode, filtros)
+Fetching:         TanStack Query v5 + Axios
+Forms:            React Hook Form + Zod
+Animaciones:      Framer Motion
+Icons:            MUI Icons + React Icons
+SEO:              React Helmet Async
+Testing:          Vitest + Testing Library
+Linting:          ESLint + Prettier
+
+## 2. PAGINA CONTENIDO
+- Portada Nombre y cargo
+- Habilidades solo de tecnologias sin agrupar de frontend o backend
+- Sobre mi, solo titulo y un parrafo borrador
+- Proyectos, solo cargar 4 items con data quemada y la estructura son: titulo, varios slug, descripcion y image. contener dos botones de demo y github.
+
